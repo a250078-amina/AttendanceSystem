@@ -9,19 +9,12 @@ pipeline {
             }
         }
 
-        stage('Stop Old Container') {
+        stage('Deploy Using Ansible') {
             steps {
                 bat '''
-                docker stop attendance-container 2>nul
-                docker rm attendance-container 2>nul
-                exit /b 0
+                wsl bash -c "cd '/mnt/c/ProgramData/Jenkins/.jenkins/workspace/AttendancePipeline' &&
+                ansible-playbook ansible/deploy.yml"
                 '''
-            }
-        }
-
-        stage('Run Docker Container') {
-            steps {
-                bat 'docker run -d --name attendance-container -p 3000:80 attendance-system'
             }
         }
     }

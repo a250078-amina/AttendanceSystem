@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: Stop old container
+    command: docker stop attendance-container
+    ignore_errors: yes
+
+  - name: Remove old container
+    command: docker rm attendance-container
+    ignore_errors: yes
+
+  - name: Run new container
+    command: docker run -d --name attendance-container -p 3000:80 attendance-system
