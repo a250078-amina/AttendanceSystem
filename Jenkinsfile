@@ -3,17 +3,24 @@ pipeline {
 
     stages {
 
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'git@github.com:a250078-amina/AttendanceSystem.git'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t attendance-system .'
             }
         }
 
-        stage('Deploy Using Ansible') {
+        stage('Run Container') {
             steps {
                 bat '''
-                wsl bash -c "cd '/mnt/c/ProgramData/Jenkins/.jenkins/workspace/AttendancePipeline' &&
-                ansible-playbook ansible/deploy.yml"
+                docker stop attendance-container 2>nul
+                docker rm attendance-container 2>nul
+                docker run -d --name attendance-container -p 3000:80 attendance-system
                 '''
             }
         }
