@@ -5,7 +5,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-               git branch: 'main', url: 'https://github.com/a250078-amina/AttendanceSystem.git'
+                checkout scm
             }
         }
 
